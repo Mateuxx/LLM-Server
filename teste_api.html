@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testar API FastAPI</title>
+    <script>
+        async function submitForm(event) {
+            event.preventDefault(); // Prevenir o envio padrão do formulário
+
+            // Pegando os valores dos inputs do formulário
+            const name = document.getElementById('name').value;
+            const age = document.getElementById('age').value;
+
+            // Dados no formato JSON esperado pela API
+            const data = {
+                name: name,
+                age: parseInt(age)
+            };
+
+            // Fazendo a requisição para a API usando fetch
+            try {
+                const response = await fetch("http://127.0.0.1:8002/submit", {  // Certifique-se de que a porta está correta
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                // Exibir a resposta da API no HTML
+                const result = await response.json();
+                document.getElementById("result").innerText = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById("result").innerText = "Erro ao conectar com a API";
+                console.error("Erro:", error);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Testar API FastAPI</h1>
+
+    <!-- Formulário simples para enviar os dados -->
+    <form id="apiForm" onsubmit="submitForm(event)">
+        <label for="name">Nome:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="age">Idade:</label>
+        <input type="number" id="age" name="age" required><br><br>
+
+        <button type="submit">Enviar</button>
+    </form>
+
+    <h2>Resultado:</h2>
+    <pre id="result"></pre>
+</body>
+</html>
